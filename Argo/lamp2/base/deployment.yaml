@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lamp-app1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lamp-app1
+  template:
+    metadata:
+      labels:
+        app: lamp-app1
+    spec:
+      containers:
+      - name: apache
+        image: php:7.4-apache
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: html-volume
+          mountPath: /var/www/html
+        envFrom:
+        - configMapRef:
+            name: lamp-app1-config
+      volumes:
+      - name: html-volume
+        persistentVolumeClaim:
+          claimName: lamp-app1-pvc

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lamp-app1-config
+data:
+  MYSQL_HOST: mysql-db
+  MYSQL_DATABASE: app1_db
+  MYSQL_USER: user
+  MYSQL_PASSWORD: password
