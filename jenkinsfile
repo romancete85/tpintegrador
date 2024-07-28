@@ -26,7 +26,7 @@ pipeline {
         stage('Terraform Action') {
             steps {
                 script {
-                    echo "Terraform action is --> ${action}"
+                    echo "Terraform action is --> ${action}"//se define la action a aplicar, segun parametrizacion
                     dir('Terraform') {
                         // Aplica Terraform usando el archivo secreto
                         if (isUnix()) {
