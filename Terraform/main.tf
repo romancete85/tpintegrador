@@ -92,7 +92,7 @@ resource "digitalocean_firewall" "db_fw" {
   inbound_rule {
     protocol   = "tcp"
     port_range = "3306"
-    source_addresses = [var.public_ip] + [for droplet in digitalocean_droplet.lamp : droplet.ipv4_address_private]
+    source_addresses = [var.public_ip]
   }
 
   outbound_rule {
