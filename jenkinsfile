@@ -1,0 +1,44 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/romancete85/tpintegrador']])
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                script {
+                    dir('Terraform') {
+                        // Inicializa Terraform
+                        if (isUnix()) {
+                            sh 'terraform init'
+                        } else {
+                            bat 'C:/Terraform/terraform.exe init'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Terraform Action') {
+            steps {
+                script {
+                    echo "Terraform action is --> ${action}"
+                    dir('Terraform') {
+                        // Aplica Terraform usando el archivo secreto
+                        if (isUnix()) {
+                            // Usa el archivo secreto desde Jenkins en Unix
+                            sh 'terraform ${action} -var-file=${JENKINS_HOME}/secrets/tfvars --auto-approve'
+                        } else {
+                            // Usa el archivo secreto desde Jenkins en Windows
+                            bat 'C:/Terraform/terraform.exe %action% -var-file=%JENKINS_HOME%\\secrets\\tp.tfvars --auto-approve'
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
