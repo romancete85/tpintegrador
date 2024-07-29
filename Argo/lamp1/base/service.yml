@@ -10,4 +10,4 @@ spec:
       port: 2900
       targetPort: 80
       name: http
-  type: LoadBalancer 
+  type: NodePort 

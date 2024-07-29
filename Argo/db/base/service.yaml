@@ -10,4 +10,5 @@ spec:
       port: 3306
       targetPort: 3306
       nodePort: 30003  # Puerto específico para NodePort (entre 30000 y 32767)
+      type: nodePort 
 

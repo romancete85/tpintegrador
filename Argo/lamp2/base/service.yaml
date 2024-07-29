@@ -10,3 +10,4 @@ spec:
       port: 80
       targetPort: 80
       nodePort: 30002  # Puerto específico para NodePort (entre 30000 y 32767)
+      type: nodePort 
