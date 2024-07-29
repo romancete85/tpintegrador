@@ -14,7 +14,7 @@ spec:
         app: nginx-alien-tetris
     spec:
       containers:
-      - name: nginx
+      - name: nginx-tetris
         image: romanfandrich/alien-tetris
         ports:
         - containerPort: 80
