@@ -7,7 +7,6 @@ spec:
     app: lamp-app1
   ports:
     - protocol: TCP
-      port: 80
+      port: 3900
       targetPort: 80
-      nodePort: 30002  # Puerto específico para NodePort (entre 30000 y 32767)
-      type: nodePort 
+  type: NodePort 

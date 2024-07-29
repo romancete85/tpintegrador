@@ -7,8 +7,7 @@ spec:
     app: mysql-db
   ports:
     - protocol: TCP
-      port: 3306
+      port: 33600
       targetPort: 3306
-      nodePort: 30003  # Puerto específico para NodePort (entre 30000 y 32767)
-      type: nodePort 
-
+      name: db
+  type: NodePort 
