@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-        // Definir la variable de entorno para el token de SonarQube
-        SONARQUBE_TOKEN = credentials('sonarqube')
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -12,15 +8,17 @@ pipeline {
         }
         stage('SonarQube Analysis') {
             steps {
-                script {
+                // Utilizar withCredentials para inyectar el token de forma segura
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONARQUBE_TOKEN')]) {
+                    // Utilizar withSonarQubeEnv para configurar el ambiente de SonarQube
                     withSonarQubeEnv('sonarqube') {
-                        sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=jenkinstest \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=http://138.197.229.67:9000 \
-                          -Dsonar.login=${env.SONARQUBE_TOKEN}
-                        '''
+                        sh """
+                           sonar-scanner \\
+                           -Dsonar.projectKey=jenkinstest \\
+                           -Dsonar.sources=. \\
+                           -Dsonar.host.url=http://138.197.229.67:9000 \\
+                           -Dsonar.login=${env.SONARQUBE_TOKEN}
+                        """
                     }
                 }
             }
