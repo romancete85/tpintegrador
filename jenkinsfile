@@ -13,7 +13,7 @@ pipeline {
                     // Utilizar withSonarQubeEnv para configurar el ambiente de SonarQube
                     withSonarQubeEnv('sonarqube') {
                         sh """
-                           sonar-scanner \\
+                           /sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \\
                            -Dsonar.projectKey=jenkinstest \\
                            -Dsonar.sources=. \\
                            -Dsonar.host.url=http://138.197.229.67:9000 \\
