@@ -9,7 +9,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('sonaqube') { // Asegúrate de que 'SonarQube Server' coincide con el nombre configurado en Jenkins
+                    withSonarQubeEnv('sonarqube') { // Asegúrate de que 'SonarQube Server' coincide con el nombre configurado en Jenkins
                         sh "sonar-scanner -Dsonar.projectKey=jenkinstest -Dsonar.sources=. -Dsonar.host.url=http://138.197.229.67:9000/ -Dsonar.login=$SONARQUBE_TOKEN"
                     }
                 }
