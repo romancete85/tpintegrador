@@ -1,5 +1,9 @@
 pipeline {
     agent any
+    environment {
+        // Definir la variable de entorno para el token de SonarQube
+        SONARQUBE_TOKEN = credentials('sonarqube')
+    }
     stages {
         stage('Checkout') {
             steps {
@@ -9,12 +13,17 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    withSonarQubeEnv('sonarqube') { // Asegúrate de que 'SonarQube Server' coincide con el nombre configurado en Jenkins
-                        sh "sonar-scanner -Dsonar.projectKey=jenkinstest -Dsonar.sources=. -Dsonar.host.url=http://138.197.229.67:9000/ -Dsonar.login=$SONARQUBE_TOKEN"
+                    withSonarQubeEnv('SonarQube') {
+                        sh '''
+                        sonar-scanner \
+                          -Dsonar.projectKey=tpintegrador \
+                          -Dsonar.sources=. \
+                          -Dsonar.host.url=http://your-sonarqube-server \
+                          -Dsonar.login=${env.SONARQUBE_TOKEN}
+                        '''
                     }
                 }
             }
         }
-        // Otras etapas según sea necesario
     }
 }
