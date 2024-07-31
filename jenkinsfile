@@ -1,43 +1,20 @@
 pipeline {
-    environment {
-        registry = "romanfandrich/alien-tetris"
-        registryCredential = 'dockerD'
-        dockerImage = ''
-    }
-agent any
+    agent any
     stages {
-        stage('Clone git') {
+        stage('Checkout') {
             steps {
-                // Clonar el repositorio
-                git url: 'https://github.com/romancete85/eduit.git', branch: 'Jenkins'
+                checkout scm
             }
         }
-        stage('BUILD Image') {
+        stage('SonarQube Analysis') {
             steps {
                 script {
-                    // Construir la imagen Docker
-                    dockerImage = docker.build registry + ":${BUILD_NUMBER}"
-                    //bat 'docker build -t %DOCKERHUB_REPO%:%BUILD_NUMBER% .'
-                }
-            }
-        }
-        stage('Deploy image') {
-            steps {
-                script {
-                    docker.withRegistry('', registryCredential ) {
-                        dockerImage.push()
-                    // Ejecutar pruebas básicas
-                    //bat 'docker exec romanfandrich/alien-tetris cmd /c "echo Pruebas ejecutadas exitosamente"'
+                    withSonarQubeEnv('sonaqube') { // Asegúrate de que 'SonarQube Server' coincide con el nombre configurado en Jenkins
+                        sh "sonar-scanner -Dsonar.projectKey=jenkinstest -Dsonar.sources=. -Dsonar.host.url=http://138.197.229.67:9000/ -Dsonar.login=$SONARQUBE_TOKEN"
                     }
                 }
             }
         }
-        stage('Run Container') {
-            steps {
-                script {
-                    bat "docker rmi $registry:${BUILD_NUMBER}"
-                }
-            }
-        }
+        // Otras etapas según sea necesario
     }
 }
