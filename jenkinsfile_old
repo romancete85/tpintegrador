@@ -1,0 +1,27 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                // Utilizar withCredentials para inyectar el token de forma segura
+                withCredentials([string(credentialsId: 'sonarqube', variable: 'SONARQUBE_TOKEN')]) {
+                    // Utilizar withSonarQubeEnv para configurar el ambiente de SonarQube
+                    withSonarQubeEnv('sonarqube') {
+                        sh """
+                           /sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \\
+                           -Dsonar.projectKey=jenkinstest \\
+                           -Dsonar.sources=. \\
+                           -Dsonar.host.url=http://138.197.229.67:9000 \\
+                           -Dsonar.login=${env.SONARQUBE_TOKEN}
+                        """
+                    }
+                }
+            }
+        }
+    }
+}
