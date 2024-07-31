@@ -14,18 +14,17 @@ pipeline {
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONARQUBE_TOKEN')]) {
                     withSonarQubeEnv('sonarqube') {
                         script {
-                            // Ensure the JAVA_HOME and PATH are set correctly
+                            // Set and use JAVA_HOME explicitly for SonarScanner
                             sh """
                             export JAVA_HOME=${JAVA_HOME}
                             export PATH=$JAVA_HOME/bin:$PATH
                             echo 'Using Java version:'
                             java -version
                             echo 'Running SonarScanner...'
-                            ${JAVA_HOME}/bin/java -version
-                            /sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-                              -Dsonar.projectKey=jenkinstest \
-                              -Dsonar.sources=. \
-                              -Dsonar.host.url=http://138.197.229.67:9000 \
+                            ${JAVA_HOME}/bin/java -jar /sonar-scanner-4.6.2.2472-linux/lib/sonar-scanner-cli.jar \\
+                              -Dsonar.projectKey=jenkinstest \\
+                              -Dsonar.sources=. \\
+                              -Dsonar.host.url=http://138.197.229.67:9000 \\
                               -Dsonar.login=$SONARQUBE_TOKEN
                             """
                         }
