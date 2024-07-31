@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-alien-tetris
+  namespace: tpint
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-alien-tetris
+  template:
+    metadata:
+      labels:
+        app: nginx-alien-tetris
+    spec:
+      containers:
+      - name: nginx-tetris
+        image: romanfandrich/alien-tetris
+        ports:
+        - containerPort: 80
