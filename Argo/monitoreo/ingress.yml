@@ -1,38 +1,28 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: example-ingress
+  name: prometheus-grafana-ingress
+  namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
+  ingressClassName: nginx
   rules:
-  - http:
+  - host: 45.55.107.62.nip.io
+    http:
       paths:
-      - path: /grafana
-        pathType: Prefix
-        backend:
-          service:
-            name: grafana
-            port:
-              number: 80
-      - path: /sonarqube
-        pathType: Prefix
-        backend:
-          service:
-            name: my-sonarqube-sonarqube
-            port:
-              number: 9000
-      - path: /prometheus
-        pathType: Prefix
+      - path: /prometheus(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
             name: prometheus-server
             port:
               number: 80
-      - path: /alertmanager
-        pathType: Prefix
+      - path: /grafana(/|$)(.*)
+        pathType: ImplementationSpecific
         backend:
           service:
-            name: prometheus-alertmanager
+            name: grafana
             port:
-              number: 9093
+              number: 80
