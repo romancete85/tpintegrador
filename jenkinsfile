@@ -18,11 +18,7 @@ pipeline {
                     withSonarQubeEnv('sonarqube') {
                         script {
                             // Adjusting the PATH to use Java 17 explicitly
-                            sh "export PATH=$JAVA_HOME/bin:$PATH && /sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \\
-                            -Dsonar.projectKey=jenkinstest \\
-                            -Dsonar.sources=. \\
-                            -Dsonar.host.url=http://138.197.229.67:9000 \\
-                            -Dsonar.login=$SONARQUBE_TOKEN"
+                            sh "export PATH=$JAVA_HOME/bin:$PATH && /sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner -Dsonar.projectKey=jenkinstest -Dsonar.sources=. -Dsonar.host.url=http://138.197.229.67:9000 -Dsonar.login=$SONARQUBE_TOKEN"
                         }
                     }
                 }
