@@ -16,9 +16,9 @@ pipeline {
                     withSonarQubeEnv('sonarqube') {
                         sh '''
                         sonar-scanner \
-                          -Dsonar.projectKey=tpintegrador \
+                          -Dsonar.projectKey=jenkinstest \
                           -Dsonar.sources=. \
-                          -Dsonar.host.url=http://your-sonarqube-server \
+                          -Dsonar.host.url=http://138.197.229.67:9000 \
                           -Dsonar.login=${env.SONARQUBE_TOKEN}
                         '''
                     }
