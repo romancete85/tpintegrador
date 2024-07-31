@@ -1,12 +1,12 @@
 pipeline {
     agent any
     environment {
-        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"  // Define el JAVA_HOME para Java 17
+        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
     }
     stages {
         stage('Checkout') {
             steps {
-                checkout scm  // Obtiene el código desde el repositorio de Git
+                checkout scm
             }
         }
         stage('SonarQube Analysis') {
@@ -14,18 +14,20 @@ pipeline {
                 withCredentials([string(credentialsId: 'sonarqube', variable: 'SONARQUBE_TOKEN')]) {
                     withSonarQubeEnv('sonarqube') {
                         script {
-                            // Define el PATH dentro del script para asegurarse que utiliza Java 17
-                            sh '''
-                            export PATH=${JAVA_HOME}/bin:$PATH
-                            echo $JAVA_HOME
-                            echo $PATH
+                            // Ensure the JAVA_HOME and PATH are set correctly
+                            sh """
+                            export JAVA_HOME=${JAVA_HOME}
+                            export PATH=$JAVA_HOME/bin:$PATH
+                            echo 'Using Java version:'
                             java -version
+                            echo 'Running SonarScanner...'
+                            ${JAVA_HOME}/bin/java -version
                             /sonar-scanner-4.6.2.2472-linux/bin/sonar-scanner \
-                            -Dsonar.projectKey=jenkinstest \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=http://138.197.229.67:9000 \
-                            -Dsonar.login=$SONARQUBE_TOKEN
-                            '''
+                              -Dsonar.projectKey=jenkinstest \
+                              -Dsonar.sources=. \
+                              -Dsonar.host.url=http://138.197.229.67:9000 \
+                              -Dsonar.login=$SONARQUBE_TOKEN
+                            """
                         }
                     }
                 }
